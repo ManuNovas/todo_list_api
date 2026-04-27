@@ -1,0 +1,42 @@
+org: maneveil
+service: todo-list-api
+
+provider:
+  name: aws
+  runtime: python3.12
+  stage: dev
+  environment:
+    USERS_TABLE_NAME: todo_users_${sls:stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USERS_TABLE_NAME}"
+            - "arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USERS_TABLE_NAME}/index/*"
+
+resources:
+  Resources:
+    UsersDynamoDBTable:
+      Type: "AWS::DynamoDB::Table"
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.USERS_TABLE_NAME}
