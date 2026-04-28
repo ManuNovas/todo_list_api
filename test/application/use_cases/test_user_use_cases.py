@@ -22,3 +22,15 @@ class TestUserUseCases(TestCase):
             password="s3cur3p455w0rd",
         ))
         self.assertIsNotNone(result.bearer_token)
+    
+    def test_register_email_exists(self):
+        self.use_cases.output_port.email_exists = MagicMock(return_value=True)
+        self.use_cases.output_port.create = MagicMock(return_value={})
+        try:
+            self.use_cases.register(CreateDto(
+                name="Clive Rosfield",
+                email="clive@rosfield.test",
+                password="s3cur3p455w0rd",
+            ))
+        except Exception as e:
+            self.assertEqual(e.args[0], 400)
