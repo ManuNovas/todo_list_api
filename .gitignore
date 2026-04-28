@@ -51,3 +51,6 @@ htmlcov/
 
 # Serverless
 .serverless/
+
+# Environment variables
+.env
