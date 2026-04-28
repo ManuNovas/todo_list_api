@@ -2,6 +2,7 @@ from unittest import TestCase
 from unittest.mock import MagicMock
 
 from src.adapters.output.user_output_adapter import UserOutputAdapter
+from src.domain.entities.user import User
 
 
 class TestUserOutputAdapter(TestCase):
@@ -23,3 +24,39 @@ class TestUserOutputAdapter(TestCase):
         })
         result = self.adapter.email_exists("joshua@rosfield.test")
         self.assertTrue(result)
+
+    def test_create_success(self):
+        user = User(
+            pk="63aefdef-b9c0-4270-b984-84a1e17550a1",
+            name="Clive Rosfield",
+            email="clive@rosfiled.test",
+            password="$argon2id$v=19$m=65536,t=3,p=4$bZbvZ6FQZIPesqnNb6eIsA$bHF+Hu97nE0HSWPZoC9bh6hS6jJtCKD1fhbxP6FwoMk",
+            created_at="2026-04-28 00:00:00",
+            updated_at=None
+        )
+        self.adapter.table.put_item = MagicMock(return_value={
+            "ResponseMetadata": {
+                "HTTPStatusCode": 200,
+            },
+        })
+        result = self.adapter.create(user)
+        self.assertEqual(result["ResponseMetadata"]["HTTPStatusCode"], 200)
+
+    def test_create_error(self):
+        user = User(
+            pk="63aefdef-b9c0-4270-b984-84a1e17550a1",
+            name="Clive Rosfield",
+            email="clive@rosfiled.test",
+            password="$argon2id$v=19$m=65536,t=3,p=4$bZbvZ6FQZIPesqnNb6eIsA$bHF+Hu97nE0HSWPZoC9bh6hS6jJtCKD1fhbxP6FwoMk",
+            created_at="2026-04-28 00:00:00",
+            updated_at=None
+        )
+        self.adapter.table.put_item = MagicMock(return_value={
+            "ResponseMetadata": {
+                "HTTPStatusCode": 400,
+            },
+        })
+        try:
+            self.adapter.create(user)
+        except Exception as exception:
+            self.assertEqual(exception.args[0], 400)

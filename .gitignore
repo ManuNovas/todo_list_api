@@ -13,6 +13,7 @@ env/
 
 # IDEs
 .idea/
+.vscode/
 
 # Django
 *.log
