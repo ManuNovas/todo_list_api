@@ -1,3 +1,5 @@
+USER_SK = "USER"
+
 class User:
     pk: str
     sk: str
@@ -9,7 +11,7 @@ class User:
 
     def __init__(self, pk: str, name: str, email: str, password: str, created_at: str, updated_at: str | None):
         self.pk = pk
-        self.sk = "USER"
+        self.sk = USER_SK
         self.name = name
         self.email = email
         self.password = password

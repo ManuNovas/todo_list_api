@@ -11,3 +11,7 @@ class UserOutputPort(ABC):
     @abstractmethod
     def create(self, user: User) -> dict:
         pass
+
+    @abstractmethod
+    def get_by_pk(self, pk: str) -> User:
+        pass
