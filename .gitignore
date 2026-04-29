@@ -54,3 +54,6 @@ htmlcov/
 
 # Environment variables
 .env
+
+# Environment variables for HTTP client
+http-client.private.env.json

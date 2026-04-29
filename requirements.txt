@@ -1,5 +1,7 @@
-boto3==1.42.96
+boto3==1.42.97
+botocore[crt]==1.42.97
 argon2-cffi==25.1.0
 aws-lambda-powertools==3.28.0
+aws-lambda-powertools[validation]==3.28.0
 dotenv==0.9.9
 pyjwt==2.12.1
