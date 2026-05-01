@@ -61,6 +61,35 @@ class TestUserOutputAdapter(TestCase):
         except Exception as exception:
             self.assertEqual(exception.args[0], 400)
 
+    def test_get_by_email_success(self):
+        self.adapter.table.scan = MagicMock(return_value={
+            "Items": [
+                {
+                    "pk": "63aefdef-b9c0-4270-b984-84a1e17550a1",
+                    "sk": USER_SK,
+                    "name": "Clive Rosfield",
+                    "email": "clive@rosfield.test",
+                    "password": "$argon2id$v=19$m=65536,t=3,p=4$bZbvZ6FQZIPesqnNb6eIsA$bHF+Hu97nE0HSWPZoC9bh6hS6jJtCKD1fhbxP6FwoMk",
+                    "created_at": "2026-04-28 00:00:00",
+                    "updated_at": None,
+                }
+            ],
+            "Count": 1,
+        })
+        email = "clive@rosfield.test"
+        result = self.adapter.get_by_email(email)
+        self.assertEqual(result.email, email)
+
+    def test_get_by_email_not_found(self):
+        self.adapter.table.scan = MagicMock(return_value={
+            "Items": [],
+            "Count": 0,
+        })
+        try:
+            self.adapter.get_by_email("joshua@rosfield.test")
+        except Exception as e:
+            self.assertEqual(e.args[0], 404)
+
     def test_get_by_pk_success(self):
         pk = "63aefdef-b9c0-4270-b984-84a1e17550a1"
         self.adapter.table.get_item = MagicMock(return_value={

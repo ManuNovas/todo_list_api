@@ -13,3 +13,11 @@ class TokenDto:
 
     def __init__(self, bearer_token: str):
         self.bearer_token = bearer_token
+
+class LoginDto:
+    email: str
+    password: str
+
+    def __init__(self, email: str, password: str):
+        self.email = email
+        self.password = password

@@ -14,6 +14,16 @@ class UserOutputAdapter(UserOutputPort):
         self.table = dynamodb.Table(table_name)
         self.logger = Logger(service="UserOutputAdapter")
 
+    def _dict_to_user(self, item: dict) -> User:
+        return User(
+            pk=item["pk"],
+            name=item["name"],
+            email=item["email"],
+            password=item["password"],
+            created_at=item["created_at"],
+            updated_at=item["updated_at"],
+        )
+
     def email_exists(self, email: str) -> bool:
         response = self.table.scan(FilterExpression=Attr("email").eq(email))
         return response["Count"] > 0
@@ -24,6 +34,15 @@ class UserOutputAdapter(UserOutputPort):
             self.logger.error(response)
             raise Exception(response["ResponseMetadata"]["HTTPStatusCode"], "An error ocurred while storing user")
         return response
+    
+    def get_by_email(self, email: str) -> User:
+        response = self.table.scan(
+            FilterExpression=Attr("email").eq(email),
+        )
+        if response["Count"] == 0:
+            self.logger.error(response)
+            raise Exception(404, "Email is not found")
+        return self._dict_to_user(response["Items"][0])
 
     def get_by_pk(self, pk: str) -> User:
         response = self.table.get_item(Key={
@@ -33,11 +52,4 @@ class UserOutputAdapter(UserOutputPort):
         if not "Item" in response:
             self.logger.error(response)
             raise Exception(404, "User is not found")
-        return User(
-            pk=response["Item"]["pk"],
-            name=response["Item"]["name"],
-            email=response["Item"]["email"],
-            password=response["Item"]["password"],
-            created_at=response["Item"]["created_at"],
-            updated_at=response["Item"]["updated_at"],
-        )
+        return self._dict_to_user(response["Item"])
