@@ -1,9 +1,9 @@
 from aws_lambda_powertools.utilities.validation import validate, SchemaValidationError
 from json import loads, dumps
 
-from src.adapters.input.schemas.user_schemas import REGISTER_BODY
+from src.adapters.input.schemas.user_schemas import REGISTER_BODY, LOGIN_BODY
 from src.application.ports.input.user_input_port import UserInputPort
-from src.domain.dtos.user_dtos import CreateDto
+from src.domain.dtos.user_dtos import CreateDto, LoginDto
 
 
 class UserInputAdapter:
@@ -21,6 +21,13 @@ class UserInputAdapter:
             },
             "body": dumps(body),
         }
+
+    def _handle_exception(self, e: Exception):
+        args_len = len(e.args)
+        return self._generate_response(
+            e.args[0] if args_len > 0 else 500,
+            {"message": e.args[1] if args_len > 1 else "Internal server error"},
+        )
 
     def register(self, event):
         try:
@@ -45,3 +52,20 @@ class UserInputAdapter:
             )
         return response
 
+    def login(self, event):
+        try:
+            body = loads(event["body"])
+            validate(body, LOGIN_BODY)
+            dto = LoginDto(
+                email=body["email"],
+                password=body["password"],
+            )
+            token = self.input_port.login(dto)
+            response = self._generate_response(200, token.__dict__)
+        except SchemaValidationError as e:
+            response = self._generate_response(400, {
+                "message": e.validation_message,
+            })
+        except Exception as e:
+            response = self._handle_exception(e)
+        return response

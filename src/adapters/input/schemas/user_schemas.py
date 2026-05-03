@@ -1,4 +1,4 @@
-REGISTER_BODY={
+REGISTER_BODY = {
     "type": "object",
     "properties": {
         "name": {
@@ -15,8 +15,26 @@ REGISTER_BODY={
         "password": {
             "type": "string",
             "minLength": 8,
-            "maxLentgh": 32,
+            "maxLentgh": 64,
         },
     },
     "required": ["name", "email", "password"],
+}
+
+LOGIN_BODY = {
+    "type": "object",
+    "properties": {
+        "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1,
+            "maxLength": 128,
+        },
+        "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64,
+        },
+    },
+    "required": ["email", "password"],
 }
