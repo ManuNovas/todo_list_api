@@ -12,3 +12,6 @@ input_adapter = UserInputAdapter(use_cases)
 
 def register(event, context):
     return input_adapter.register(event)
+
+def login(event, context):
+    return input_adapter.login(event)

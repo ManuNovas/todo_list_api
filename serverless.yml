@@ -50,6 +50,14 @@ functions:
           method: POST
           path: /register
 
+  login:
+    handler: src/adapters/handlers/user_handler.login
+    memorySize: 512
+    events:
+      - httpApi:
+          method: POST
+          path: /login
+
 custom:
   pythonRequirements:
     # dockerizePip: true
@@ -64,3 +72,18 @@ custom:
 
 package:
   individually: true
+  patterns:
+    - "!**/.vscode/**"
+    - "!**/.venv/**"
+    - "!**/node_modules/**"
+    - "!**/.serverless/**"
+    - "!**/__pycache__/**"
+    - "!**/*.pyc"
+    - "!**/.coverage"
+    - "!**/htmlcov/**"
+    - "!**/.pytest_cache/**"
+    - "!**/.mypy_cache/**"
+    - "!**/.ruff_cache/**"
+    - "!test/**"
+    - "serverless.yml"
+    - "requirements.txt"
