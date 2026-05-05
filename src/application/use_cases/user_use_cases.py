@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from src.application.ports.input.user_input_port import UserInputPort
 from src.application.ports.output.user_output_port import UserOutputPort
-from src.domain.dtos.user_dtos import CreateDto, TokenDto, LoginDto
+from src.domain.dtos.user_dtos import CreateDto, TokenDto, LoginDto, TOKEN_ALGORITHM
 from src.domain.entities.user import User
 
 load_dotenv()
@@ -24,7 +24,7 @@ class UserUseCases(UserInputPort):
         }
         secret = getenv("JWT_SECRET_KEY")
         return TokenDto(
-            bearer_token=encode(bearer_payload, secret, "HS256"),
+            bearer_token=encode(bearer_payload, secret, TOKEN_ALGORITHM),
         )
 
     def register(self, dto: CreateDto) -> TokenDto:

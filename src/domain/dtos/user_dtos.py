@@ -1,3 +1,5 @@
+TOKEN_ALGORITHM = "HS256"
+
 class CreateDto:
     name: str
     email: str
@@ -21,3 +23,9 @@ class LoginDto:
     def __init__(self, email: str, password: str):
         self.email = email
         self.password = password
+
+class BearerTokenDto:
+    token: str
+
+    def __init__(self, token: str):
+        self.token = token
