@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant AG as APIGateway
+    participant UAA as UserAPIAdapter
+    participant UUC as UserUseCases
+    participant URA as UserRepositoryAdapter
+    participant CPA as CredentialProviderAdapter
+    AG ->> UAA: register_handler
+    UAA ->> UUC: register
+    UUC ->> URA: email_exists
+    URA -->> UUC: boolean
+    UUC ->> URA: create
+    URA -->> UUC: int
+    UUC ->> CPA: get_credentials
+    CPA -->> UUC: Credential
+    UUC -->> UAA: Token
+    UAA --> AG: ApiGatewayProxyResult
