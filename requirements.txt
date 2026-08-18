@@ -1,4 +1,7 @@
-aws-cdk-lib==2.265.0
-constructs==10.8.1
-boto3==1.43.73
-aws-lambda-powertools==3.34.0
+aws-cdk-lib
+constructs
+boto3
+aws-lambda-powertools
+aws-lambda-powertools[datamasking]
+bcrypt
+pyjwt[crypto]
