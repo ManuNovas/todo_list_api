@@ -1,6 +1,7 @@
 from aws_cdk import NestedStack
 from aws_cdk.aws_dynamodb import TableV2, Attribute, AttributeType, GlobalSecondaryIndexPropsV2
 from constructs import Construct
+from src.domain.entities.user import USER_EMAIL_INDEX
 
 
 class RepositoryNestedStack(NestedStack):
@@ -11,7 +12,7 @@ class RepositoryNestedStack(NestedStack):
         users_email_attribute = Attribute(name="email", type=AttributeType.STRING)
         users_global_secondary_indexes = [
             GlobalSecondaryIndexPropsV2(
-                index_name="users_email_gsi",
+                index_name=USER_EMAIL_INDEX,
                 partition_key=users_partition_key,
                 sort_key=users_email_attribute,
             )

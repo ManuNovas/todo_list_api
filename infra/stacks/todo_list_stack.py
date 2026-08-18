@@ -1,7 +1,6 @@
 from aws_cdk import Stack
 from constructs import Construct
-
-from nested_stacks.repository_nested_stack import RepositoryNestedStack
+from infra.nested_stacks.repository_nested_stack import RepositoryNestedStack
 
 
 class TodoListStack(Stack):

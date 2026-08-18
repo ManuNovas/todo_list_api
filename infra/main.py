@@ -1,6 +1,5 @@
 from aws_cdk import App
-
-from stacks.todo_list_stack import TodoListStack
+from infra.stacks.todo_list_stack import TodoListStack
 
 app = App()
 TodoListStack(app, "TodoList")

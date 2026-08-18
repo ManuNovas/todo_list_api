@@ -1,2 +1,4 @@
-aws-cdk-lib>=2.265.0,<3.0.0
-constructs>=10.5.0,<11.0.0
+aws-cdk-lib==2.265.0
+constructs==10.8.1
+boto3==1.43.73
+aws-lambda-powertools==3.34.0
